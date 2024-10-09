@@ -1,0 +1,18 @@
+<!-- product.component.html -->
+<div class="container">
+  <div class="product-card" *ngIf="product">
+    <div class="product-image">
+      <img [src]="product.image_url" [alt]="product.name" />
+    </div>
+    <div class="product-details">
+      <h2 class="product-name">{{ product.name }}</h2>
+      <p class="product-description">{{ product.description }}</p>
+      <div class="product-price">{{ product.price | currency : "USD" }}</div>
+      <div class="add-to-cart-container">
+        <button class="add-to-cart" (click)="addToCart(product)">
+          <i class="fas fa-shopping-cart"></i> Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

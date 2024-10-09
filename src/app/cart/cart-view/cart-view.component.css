@@ -1,0 +1,9 @@
+.cart-card{
+    max-width: 750px;
+    width: 100%;
+    justify-content: center;
+}
+
+.total-price{
+    font-weight: 800;
+}

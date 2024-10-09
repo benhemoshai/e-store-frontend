@@ -1,0 +1,73 @@
+<div class="container mt-5">
+  <h4 class="mb-4 text-center">Your Cart</h4>
+  <div class="container">
+    <mat-list>
+      <mat-list-item *ngFor="let item of cartItems">
+        <img
+          matListItemAvatar
+          [src]="item.product.image_url"
+          [alt]="item.product.name"
+          style="width: 40px; height: 40px; object-fit: cover"
+        />
+        <div matListItemTitle>{{ item.product.name }}</div>
+        <div matListItemLine>
+          {{ item.product.price | currency : "USD" }} x {{ item.quantity }} =
+          {{ item.product.price * item.quantity | currency : "USD" }}
+        </div>
+        <div matListItemMeta class="d-flex align-items-center">
+          <button
+            mat-icon-button
+            color="primary"
+            *ngIf="item.quantity > 1"
+            (click)="decrementQuantity(item)"
+            aria-label="Decrease quantity"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span class="mx-2">{{ item.quantity }}</span>
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="incrementQuantity(item)"
+            aria-label="Increase quantity"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeItem(item)"
+            aria-label="Remove item"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+
+      <mat-divider></mat-divider>
+
+      <mat-list-item>
+        <div matListItemTitle class="total-price">Total</div>
+        <div matListItemLine class="total-price">
+          {{ totalPrice | currency : "USD" }}
+        </div>
+      </mat-list-item>
+
+      <mat-list-item>
+        <div class="d-flex justify-content-end w-100">
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="clearCart()"
+            class="me-2"
+          >
+            Clear Cart
+          </button>
+          <button mat-raised-button color="primary" (click)="checkOut()">
+            Checkout
+          </button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
