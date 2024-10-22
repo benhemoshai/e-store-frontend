@@ -14,6 +14,7 @@ import { CartItem } from '../../models/cart-item.model';
 export class ProductComponent implements OnInit {
   product!: Product; // The product to display
   productId!: string; // The product ID
+  showReviews = false; 
 
   constructor(
     private productService: ProductService, 
@@ -31,6 +32,11 @@ export class ProductComponent implements OnInit {
       this.product = data; // Assign the fetched product to the component property
     });
   }
+
+    // Toggle reviews visibility
+    toggleReviews() {
+      this.showReviews = !this.showReviews;
+    }
 
   addToCart(product: Product): void {
     if (!product || !product._id) {

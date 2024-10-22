@@ -1,33 +1,29 @@
 <div class="container">
-  <mat-form-field>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Search" />
-  </mat-form-field>
+  <div class="search-sort-section">
+    <mat-form-field appearance="outline">
+      <mat-label>Search Products</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search" />
+      <mat-icon matSuffix></mat-icon>
+    </mat-form-field>
 
-  <mat-form-field class="sort-drop">
-    <mat-select
-      (selectionChange)="sortProducts($event.value)"
-      placeholder="Sort"
-    >
-      <mat-option value="priceLowHigh">Price: Low to High</mat-option>
-      <mat-option value="priceHighLow">Price: High to Low</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="sort-drop">
+      <mat-label>Sort By</mat-label>
+      <mat-select (selectionChange)="sortProducts($event.value)">
+        <mat-option value="priceLowHigh">Price: Low to High</mat-option>
+        <mat-option value="priceHighLow">Price: High to Low</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   <h4>Our Latest Collection</h4>
+
   <div class="row">
-    <div
-      class="col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center"
-      *ngFor="let product of filteredProducts"
-    >
-      <mat-card
-        class="product-card mb-4 text-center"
-        [routerLink]="['/products', product._id]"
-      >
+    <div class="product-item" *ngFor="let product of filteredProducts">
+      <mat-card class="product-card" [routerLink]="['/products', product._id]">
         <img
           mat-card-image
           [src]="product.image_url"
-          height="150"
-          width="150"
+          [alt]="product.name"
           loading="lazy"
         />
         <mat-card-content>

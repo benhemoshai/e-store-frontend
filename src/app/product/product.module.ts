@@ -8,13 +8,14 @@ import {MatSelectModule} from '@angular/material/select';
 import { ProductComponent } from './product/product.component';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { ReviewModule } from '../review/review.module';
 
 
 
 @NgModule({
   declarations: [
     ProductListComponent,
-    ProductComponent
+    ProductComponent,
   ],
   imports: [
     CommonModule,
@@ -23,7 +24,8 @@ import { RouterLink } from '@angular/router';
     MatInputModule,
     MatSelectModule,
     MatButton,
-    RouterLink
+    RouterLink,
+    ReviewModule
   ]
 })
 export class ProductModule { }

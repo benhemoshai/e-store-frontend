@@ -1,17 +1,35 @@
-<!-- product.component.html -->
-<div class="container">
-  <div class="product-card" *ngIf="product">
-    <div class="product-image">
-      <img [src]="product.image_url" [alt]="product.name" />
+<div class="page-container">
+  <div class="content-wrapper">
+    <!-- Left side - Product Card -->
+    <div class="product-section">
+      <div class="product-card" *ngIf="product">
+        <div class="product-image">
+          <img [src]="product.image_url" [alt]="product.name" />
+        </div>
+        <div class="product-details">
+          <h2 class="product-name">{{ product.name }}</h2>
+          <p class="product-description">{{ product.description }}</p>
+          <div class="product-price">
+            {{ product.price | currency : "USD" }}
+          </div>
+          <div class="add-to-cart-container">
+            <button class="add-to-cart" (click)="addToCart(product)">
+              <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="product-details">
-      <h2 class="product-name">{{ product.name }}</h2>
-      <p class="product-description">{{ product.description }}</p>
-      <div class="product-price">{{ product.price | currency : "USD" }}</div>
-      <div class="add-to-cart-container">
-        <button class="add-to-cart" (click)="addToCart(product)">
-          <i class="fas fa-shopping-cart"></i> Add to Cart
+
+    <!-- Right side - Reviews -->
+    <div class="reviews-section">
+      <div class="review-button">
+        <button (click)="toggleReviews()">
+          {{ showReviews ? "Hide Reviews" : "View Reviews" }}
         </button>
+      </div>
+      <div class="reviews-container" *ngIf="showReviews">
+        <app-review [productId]="product._id"></app-review>
       </div>
     </div>
   </div>

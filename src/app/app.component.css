@@ -1,0 +1,179 @@
+/* Main Header */
+.main-header {
+    background: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 70px;
+  }
+  
+  /* Brand Section */
+  .brand-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #1e293b;
+    font-size: 1.25rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+  }
+  
+  .brand:hover {
+    color: #3498db;
+  }
+  
+  .brand mat-icon {
+    color: #3498db;
+    transition: transform 0.3s ease;
+  }
+  
+  .brand:hover mat-icon {
+    transform: rotate(-10deg);
+  }
+  
+  /* Navigation Links */
+  .nav-links {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1e293b;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  .nav-links a mat-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .nav-links a:hover {
+    color: #3498db;
+  }
+  
+  .nav-links a:hover mat-icon {
+    transform: translateY(-2px);
+  }
+  
+  /* Active Link Styles */
+  .nav-links a.active {
+    color: #3498db;
+  }
+  
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 3px;
+    background: linear-gradient(to right, #3498db, #2980b9);
+    border-radius: 2px;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(to right, #f8fafc, #edf2f7);
+    padding: 3rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .hero-section h1 {
+    color: #1e293b;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .hero-section h1::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(to right, #3498db, #2980b9);
+    border-radius: 2px;
+  }
+  
+  .hero-section h5 {
+    color: #64748b;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  /* Main Content Area */
+  .main-content {
+    min-height: calc(100vh - 70px - 220px); /* Viewport height minus header and hero */
+    padding: 2rem 0;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 0 1rem;
+    }
+  
+    .brand span {
+      display: none;
+    }
+  
+    .nav-links a span {
+      display: none;
+    }
+  
+    .hero-section {
+      padding: 2rem 1rem;
+    }
+  
+    .hero-section h1 {
+      font-size: 2rem;
+    }
+  
+    .hero-section h5 {
+      font-size: 1.1rem;
+      padding: 0 1rem;
+    }
+  }
+  
+  /* Material Button Override */
+  ::ng-deep .mat-mdc-button {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    letter-spacing: 0.5px;
+  }
+  
+  ::ng-deep .mat-mdc-button:hover {
+    background-color: rgba(52, 152, 219, 0.1) !important;
+  }

@@ -1,14 +1,44 @@
-<mat-toolbar style="background-color: antiquewhite">
-  <mat-toolbar-row>
-    <a href="/products" mat-button>Products</a>
-    <a href="/cart" mat-button>Cart</a>
+<!-- Main Navigation -->
+<mat-toolbar class="main-header">
+  <mat-toolbar-row class="nav-container">
+    <!-- Brand Section -->
+    <div class="brand-section">
+      <a href="/" class="brand">
+        <mat-icon>palette</mat-icon>
+        <span>Animal Arts</span>
+      </a>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="nav-links">
+      <a
+        mat-button
+        href="/products"
+        routerLink="/products"
+        routerLinkActive="active"
+      >
+        <mat-icon>grid_view</mat-icon>
+        <span>Products</span>
+      </a>
+      <a mat-button href="/cart" routerLink="/cart" routerLinkActive="active">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Cart</span>
+      </a>
+    </nav>
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="container mt-5 text-center">
-  <h1>Amazing Animal Paintings</h1>
-  <h5>Make your home a special place with our beautiful and unique artwork.</h5>
-  <hr />
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-content">
+    <h1>Amazing Animal Paintings</h1>
+    <h5>
+      Make your home a special place with our beautiful and unique artwork.
+    </h5>
+  </div>
 </div>
 
-<router-outlet></router-outlet>
+<!-- Main Content Area -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
