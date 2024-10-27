@@ -9,6 +9,7 @@ import { ProductComponent } from './product/product.component';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { ReviewModule } from '../review/review.module';
+import { MatIcon } from '@angular/material/icon';
 
 
 
@@ -25,7 +26,8 @@ import { ReviewModule } from '../review/review.module';
     MatSelectModule,
     MatButton,
     RouterLink,
-    ReviewModule
+    ReviewModule,
+    MatIcon
   ]
 })
 export class ProductModule { }
