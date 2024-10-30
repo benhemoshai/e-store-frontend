@@ -11,11 +11,14 @@ import {MatButtonModule} from '@angular/material/button';
 import { CartModule } from './cart/cart.module';
 import { ReviewModule } from './review/review.module';
 import { MatIcon } from '@angular/material/icon';
+import { AuthModule } from './auth/auth.module';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +28,8 @@ import { MatIcon } from '@angular/material/icon';
     MatButtonModule,
     CartModule,
     ReviewModule,
-    MatIcon
+    MatIcon,
+    AuthModule
   ],
   providers: [
     provideClientHydration(),

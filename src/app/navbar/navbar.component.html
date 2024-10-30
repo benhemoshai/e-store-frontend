@@ -1,0 +1,65 @@
+<!-- Main Navigation -->
+<mat-toolbar class="main-header">
+  <mat-toolbar-row class="nav-container">
+    <!-- Brand Section -->
+    <div class="brand-section">
+      <a href="/" class="brand">
+        <mat-icon>palette</mat-icon>
+        <span>Animal Arts</span>
+      </a>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="nav-links">
+      <a mat-button routerLink="/products" routerLinkActive="active">
+        <mat-icon>grid_view</mat-icon>
+        <span>Products</span>
+      </a>
+      <a mat-button routerLink="/cart" routerLinkActive="active">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Cart</span>
+      </a>
+
+      <ng-container *ngIf="isLoggedIn; else loggedOut">
+        <!-- User Name Display -->
+        <span class="user-name">{{ userName }}</span>
+
+        <!-- Logout Button Styled as Link -->
+        <a mat-button color="accent" class="logout-button" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </a>
+      </ng-container>
+
+      <ng-template #loggedOut>
+        <!-- Login Button -->
+        <a
+          mat-button
+          color="accent"
+          class="login-button"
+          routerLink="/auth/login"
+          routerLinkActive="active"
+        >
+          <mat-icon>login</mat-icon>
+          <span>Login</span>
+        </a>
+
+        <!-- Sign up Button -->
+        <a mat-button routerLink="/auth/register" routerLinkActive="active">
+          <mat-icon>person_add</mat-icon>
+          <span>Sign Up</span>
+        </a>
+      </ng-template>
+    </nav>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-content">
+    <h1>Amazing Animal Paintings</h1>
+    <h5>
+      Make your home a special place with our beautiful and unique artwork.
+    </h5>
+  </div>
+</div>
