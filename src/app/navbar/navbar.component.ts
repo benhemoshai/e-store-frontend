@@ -1,5 +1,5 @@
 // navbar.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { Subscription } from 'rxjs';
@@ -12,21 +12,34 @@ import { Subscription } from 'rxjs';
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   userName: string | null = null;
+  isMobile: boolean = false;
   private userSubscription?: Subscription;
 
   constructor(
     private authService: AuthService,
     private router: Router
   ) {}
-  
+
   ngOnInit(): void {
+    // Subscribe to auth status
     this.userSubscription = this.authService.currentUser$.subscribe(user => {
-      this.isLoggedIn = !!user; // Set isLoggedIn based on user existence
-      this.userName = user?.userName|| null; // Accessing userName correctly
-      console.log(user)
+      this.isLoggedIn = !!user;
+      this.userName = user?.userName || null;
     });
+    
+    // Initialize screen size
+    this.checkScreenSize();
   }
-  
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize(): void {
+    this.isMobile = window.innerWidth <= 768; // Mobile breakpoint
+  }
+
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();

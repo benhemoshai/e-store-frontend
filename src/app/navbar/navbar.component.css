@@ -140,34 +140,7 @@
     padding: 2rem 0;
   }
   
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .nav-container {
-      padding: 0 1rem;
-    }
-  
-    .brand span {
-      display: none;
-    }
-  
-    .nav-links a span {
-      display: none;
-    }
-  
-    .hero-section {
-      padding: 2rem 1rem;
-    }
-  
-    .hero-section h1 {
-      font-size: 2rem;
-    }
-  
-    .hero-section h5 {
-      font-size: 1.1rem;
-      padding: 0 1rem;
-    }
-  }
-  
+ 
   /* Material Button Override */
   ::ng-deep .mat-mdc-button {
     font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
@@ -208,4 +181,42 @@ button {
 /* Change button color on hover */
 button:hover {
   color: #3498db; /* Change color on hover */
+}
+
+/* Additional styles for responsive design */
+.hamburger-menu {
+  display: none; /* Hidden by default */
+}
+
+/* Adjust display styles for smaller screens */
+@media (max-width: 768px) {
+
+  .nav-container {
+    padding: 0 1rem;
+  }
+
+  .brand span {
+    display: none;
+  }
+
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section h5 {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+
+  .nav-links {
+    display: none; /* Hide default nav links on mobile */
+  }
+  
+  .hamburger-menu {
+    display: block; /* Show hamburger menu on mobile */
+  }
 }

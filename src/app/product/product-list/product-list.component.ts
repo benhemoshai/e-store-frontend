@@ -25,11 +25,6 @@ constructor(private productService: ProductService,
       this.filteredProducts = data;
     })
    }
-
-   goToProduct(productId: string): void {
-    this.router.navigate(['/products', productId]); // Navigate to product page with ID
-  }
-
   
    applyFilter(event: Event) : void {
     let searchTerm = (event.target as HTMLInputElement).value;

@@ -13,6 +13,7 @@ import { ReviewModule } from './review/review.module';
 import { MatIcon } from '@angular/material/icon';
 import { AuthModule } from './auth/auth.module';
 import { NavbarComponent } from './navbar/navbar.component';
+import { MatMenuModule } from '@angular/material/menu'; // Import MatMenuModule
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     CartModule,
     ReviewModule,
     MatIcon,
-    AuthModule
+    AuthModule,
+    MatMenuModule
   ],
   providers: [
     provideClientHydration(),

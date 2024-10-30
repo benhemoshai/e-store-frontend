@@ -9,8 +9,50 @@
       </a>
     </div>
 
-    <!-- Navigation Links -->
-    <nav class="nav-links">
+    <!-- Hamburger Menu Icon for Mobile -->
+    <div *ngIf="isMobile" class="hamburger-menu">
+      <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #mobileMenu="matMenu">
+        <button mat-menu-item routerLink="/products" routerLinkActive="active">
+          <mat-icon>grid_view</mat-icon>
+          <span>Products</span>
+        </button>
+        <button mat-menu-item routerLink="/cart" routerLinkActive="active">
+          <mat-icon>shopping_cart</mat-icon>
+          <span>Cart</span>
+        </button>
+        <ng-container *ngIf="isLoggedIn; else loggedOut">
+          <button mat-menu-item>{{ userName }}</button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </ng-container>
+        <ng-template #loggedOut>
+          <button
+            mat-menu-item
+            routerLink="/auth/login"
+            routerLinkActive="active"
+          >
+            <mat-icon>login</mat-icon>
+            <span>Login</span>
+          </button>
+          <button
+            mat-menu-item
+            routerLink="/auth/register"
+            routerLinkActive="active"
+          >
+            <mat-icon>person_add</mat-icon>
+            <span>Sign Up</span>
+          </button>
+        </ng-template>
+      </mat-menu>
+    </div>
+
+    <!-- Default Navigation Links for Desktop -->
+    <nav *ngIf="!isMobile" class="nav-links">
       <a mat-button routerLink="/products" routerLinkActive="active">
         <mat-icon>grid_view</mat-icon>
         <span>Products</span>
@@ -19,32 +61,23 @@
         <mat-icon>shopping_cart</mat-icon>
         <span>Cart</span>
       </a>
-
       <ng-container *ngIf="isLoggedIn; else loggedOut">
-        <!-- User Name Display -->
         <span class="user-name">{{ userName }}</span>
-
-        <!-- Logout Button Styled as Link -->
         <a mat-button color="accent" class="logout-button" (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
         </a>
       </ng-container>
-
       <ng-template #loggedOut>
-        <!-- Login Button -->
         <a
           mat-button
           color="accent"
-          class="login-button"
           routerLink="/auth/login"
           routerLinkActive="active"
         >
           <mat-icon>login</mat-icon>
           <span>Login</span>
         </a>
-
-        <!-- Sign up Button -->
         <a mat-button routerLink="/auth/register" routerLinkActive="active">
           <mat-icon>person_add</mat-icon>
           <span>Sign Up</span>
