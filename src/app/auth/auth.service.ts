@@ -3,12 +3,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { User } from '../models/user';
 
-interface User {
-  userName: any; // Change from name to userName
-  email: any,
-  password: any
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +25,10 @@ export class AuthService {
 
   register(userData: User): Observable<User> {
     return this.http.post<User>(`${this.apiURL}/register`, userData).pipe(
-      
       tap(user => {
         // Store user data as received from backend
         this.setCurrentUser(user);
+        console.log(userData)
       })
     );
   }
