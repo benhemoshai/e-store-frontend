@@ -28,7 +28,7 @@ export class AuthService {
       tap(user => {
         // Store user data as received from backend
         this.setCurrentUser(user);
-        console.log(userData)
+        //console.log(userData)
       })
     );
   }
@@ -50,6 +50,7 @@ export class AuthService {
   private setCurrentUser(user: User): void {
     // Store the user object received from backend
     localStorage.setItem('currentUser', JSON.stringify(user));
+    console.log(this.currentUser$)
     this.currentUserSubject.next(user);
   }
 

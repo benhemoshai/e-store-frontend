@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   userName: string | null = null;
+  userId: string | null = null; // Add userId property
   isMobile: boolean = false;
   private userSubscription?: Subscription;
 
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.currentUser$.subscribe(user => {
       this.isLoggedIn = !!user;
       this.userName = user?.userName || null;
+      this.userId = user?.userId || null; // Extract userId
     });
     
     // Initialize screen size

@@ -11,7 +11,7 @@ import { LoginComponent
 const routes: Routes = [
   {path:'', redirectTo: '/products', pathMatch: 'full'},
   {path: 'products', component: ProductListComponent},
-  {path: 'cart', component: CartViewComponent},
+  {path: 'cart/:userId', component: CartViewComponent},
   {path: 'products/:id', component: ProductComponent},
   {path: 'products/:id/reviews', component: ReviewComponent},
   {path: 'auth/register', component: RegisterComponent},

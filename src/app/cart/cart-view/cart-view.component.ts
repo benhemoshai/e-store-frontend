@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../cart.service';
 import { CartItem } from '../../models/cart-item.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../auth/auth.service';
-import { User } from '../../models/user';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,20 +14,26 @@ export class CartViewComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   totalPrice: number = 0;
   userId: string | null = null;
-  userSubscription: Subscription | undefined;
+  routeSubscription: Subscription | undefined;
 
   constructor(
     private cartService: CartService,
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private route: ActivatedRoute // Inject ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to currentUser$ to get user ID
-    this.userSubscription = this.authService.currentUser$.subscribe((user: User | null) => {
-      this.userId = user ? user._id : null;
+    // Get userId from route parameters
+    this.routeSubscription = this.route.paramMap.subscribe(params => {
+      this.userId = params.get('userId');
       if (this.userId) {
         this.loadCartItems();
+      } else {
+        this.snackBar.open('User ID not found in the route', '', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        });
       }
     });
   }
@@ -138,8 +143,8 @@ export class CartViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
     }
   }
 }
