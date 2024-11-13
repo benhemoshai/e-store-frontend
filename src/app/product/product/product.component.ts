@@ -23,7 +23,7 @@ export class ProductComponent implements OnInit {
     private cartService: CartService,
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
-    private authService: AuthService  // Add AuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +33,7 @@ export class ProductComponent implements OnInit {
       next: (data) => {
         this.product = data;
       },
-      error: (error) => {
+      error: () => {
         this.snackbar.open('Error loading product details', 'Close', {
           duration: 3000,
           horizontalPosition: 'right',
@@ -43,7 +43,7 @@ export class ProductComponent implements OnInit {
     });
   }
 
-  toggleReviews() {
+  toggleReviews(): void {
     this.showReviews = !this.showReviews;
   }
 
@@ -52,30 +52,27 @@ export class ProductComponent implements OnInit {
       console.error('Invalid product', product);
       return;
     }
-  
-    // Get current user from AuthService
+
+    // Check if the user is logged in before proceeding
+    if (!this.authService.isLoggedIn()) {
+      alert('Please log in to add items to the cart.');
+      return;
+    }
+
+    // Since the user is logged in, get the current user and proceed with adding to the cart
     this.authService.currentUser$.pipe(take(1)).subscribe({
       next: (user) => {
-        // Ensure user exists and has userId
-        if (!user || !user.userId) {
-          this.snackbar.open('Please log in to add items to cart', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top'
-          });
-          return;
-        }
-  
-        // User is authenticated; proceed to get cart items
-        this.cartService.getCartItems(user.userId).subscribe({
+        // Fetch existing cart items for the user
+        this.cartService.getCartItems(user!.userId).subscribe({
           next: (cartItems) => {
             const existingCartItem = cartItems.find(item => 
               item.product && item.product._id === product._id
             );
-  
+
             if (existingCartItem) {
+              // Update quantity if item already exists in the cart
               existingCartItem.quantity = (existingCartItem.quantity || 0) + 1;
-              this.cartService.updateCartItem(user.userId, existingCartItem).subscribe({
+              this.cartService.updateCartItem(user!.userId, existingCartItem).subscribe({
                 next: () => {
                   this.snackbar.open('Updated Quantity in Cart', '', {
                     horizontalPosition: 'right',
@@ -83,7 +80,7 @@ export class ProductComponent implements OnInit {
                     duration: 2000
                   });
                 },
-                error: (error) => {
+                error: () => {
                   this.snackbar.open('Error updating cart', 'Close', {
                     duration: 3000,
                     horizontalPosition: 'right',
@@ -92,8 +89,9 @@ export class ProductComponent implements OnInit {
                 }
               });
             } else {
+              // Add new item to the cart if not already present
               const newCartItem = new CartItem(product, 1);
-              this.cartService.addToCart(user.userId, newCartItem).subscribe({
+              this.cartService.addToCart(user!.userId, newCartItem).subscribe({
                 next: () => {
                   this.snackbar.open('Added To Cart', '', {
                     horizontalPosition: 'right',
@@ -101,7 +99,7 @@ export class ProductComponent implements OnInit {
                     duration: 2000
                   });
                 },
-                error: (error) => {
+                error: () => {
                   this.snackbar.open('Error adding to cart', 'Close', {
                     duration: 3000,
                     horizontalPosition: 'right',
@@ -111,7 +109,7 @@ export class ProductComponent implements OnInit {
               });
             }
           },
-          error: (error) => {
+          error: () => {
             this.snackbar.open('Error accessing cart', 'Close', {
               duration: 3000,
               horizontalPosition: 'right',
@@ -120,7 +118,7 @@ export class ProductComponent implements OnInit {
           }
         });
       },
-      error: (error) => {
+      error: () => {
         this.snackbar.open('Authentication error', 'Close', {
           duration: 3000,
           horizontalPosition: 'right',
@@ -129,5 +127,4 @@ export class ProductComponent implements OnInit {
       }
     });
   }
-  
 }

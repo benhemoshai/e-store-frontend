@@ -5,8 +5,6 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -26,9 +24,7 @@ export class AuthService {
   register(userData: User): Observable<User> {
     return this.http.post<User>(`${this.apiURL}/register`, userData).pipe(
       tap(user => {
-        // Store user data as received from backend
         this.setCurrentUser(user);
-        //console.log(userData)
       })
     );
   }
@@ -40,7 +36,6 @@ export class AuthService {
       })
     );
   }
-  
 
   logout(): void {
     localStorage.removeItem('currentUser'); // Clear stored user data
@@ -48,11 +43,17 @@ export class AuthService {
   }
 
   private setCurrentUser(user: User): void {
-    // Store the user object received from backend
     localStorage.setItem('currentUser', JSON.stringify(user));
-    console.log(this.currentUser$)
     this.currentUserSubject.next(user);
   }
 
-  
+  // New Methods
+
+  isLoggedIn(): boolean {
+    return this.currentUserSubject.value !== null;
+  }
+
+  getUsername(): string {
+    return this.currentUserSubject.value ? this.currentUserSubject.value.userName : "";
+  }
 }
