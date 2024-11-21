@@ -4,22 +4,22 @@ import { Product } from '../../models/product';
 import { CartService } from '../../cart/cart.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { CartItem } from '../../models/cart-item.model';
 import { AuthService } from '../../auth/auth.service';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css']
+  styleUrls: ['./product.component.css'],
 })
 export class ProductComponent implements OnInit {
   product!: Product;
   productId!: string;
+  isLoggedIn = false;
+  isAdmin = false; // Track if the user is an admin
   showReviews = false;
 
   constructor(
-    private productService: ProductService, 
+    private productService: ProductService,
     private cartService: CartService,
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
@@ -27,8 +27,10 @@ export class ProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Fetch the product ID from the route
     this.productId = this.route.snapshot.paramMap.get('id')!;
-    
+
+    // Fetch product details
     this.productService.getProduct(this.productId).subscribe({
       next: (data) => {
         this.product = data;
@@ -37,9 +39,15 @@ export class ProductComponent implements OnInit {
         this.snackbar.open('Error loading product details', 'Close', {
           duration: 3000,
           horizontalPosition: 'right',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
         });
-      }
+      },
+    });
+
+    // Subscribe to authentication state
+    this.authService.currentUser$.subscribe((user) => {
+      this.isLoggedIn = !!user; // Update login state
+      this.isAdmin = user?.role === 'admin'; // Check if the user is an admin
     });
   }
 
@@ -47,84 +55,65 @@ export class ProductComponent implements OnInit {
     this.showReviews = !this.showReviews;
   }
 
-  addToCart(product: Product): void {
-    if (!product || !product._id) {
-      console.error('Invalid product', product);
+  addToCart(): void {
+    if (!this.product || !this.product._id) {
+      console.error('Invalid product', this.product);
       return;
     }
 
-    // Check if the user is logged in before proceeding
-    if (!this.authService.isLoggedIn()) {
-      alert('Please log in to add items to the cart.');
+    // Check if the user is logged in
+    if (!this.isLoggedIn) {
+      this.snackbar.open('Please log in to add items to the cart.', '', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
       return;
     }
 
-    // Since the user is logged in, get the current user and proceed with adding to the cart
-    this.authService.currentUser$.pipe(take(1)).subscribe({
-      next: (user) => {
-        // Fetch existing cart items for the user
-        this.cartService.getCartItems(user!.userId).subscribe({
-          next: (cartItems) => {
-            const existingCartItem = cartItems.find(item => 
-              item.product && item.product._id === product._id
-            );
-
-            if (existingCartItem) {
-              // Update quantity if item already exists in the cart
-              existingCartItem.quantity = (existingCartItem.quantity || 0) + 1;
-              this.cartService.updateCartItem(user!.userId, existingCartItem).subscribe({
-                next: () => {
-                  this.snackbar.open('Updated Quantity in Cart', '', {
-                    horizontalPosition: 'right',
-                    verticalPosition: 'top',
-                    duration: 2000
-                  });
-                },
-                error: () => {
-                  this.snackbar.open('Error updating cart', 'Close', {
-                    duration: 3000,
-                    horizontalPosition: 'right',
-                    verticalPosition: 'top'
-                  });
-                }
-              });
-            } else {
-              // Add new item to the cart if not already present
-              const newCartItem = new CartItem(product, 1);
-              this.cartService.addToCart(user!.userId, newCartItem).subscribe({
-                next: () => {
-                  this.snackbar.open('Added To Cart', '', {
-                    horizontalPosition: 'right',
-                    verticalPosition: 'top',
-                    duration: 2000
-                  });
-                },
-                error: () => {
-                  this.snackbar.open('Error adding to cart', 'Close', {
-                    duration: 3000,
-                    horizontalPosition: 'right',
-                    verticalPosition: 'top'
-                  });
-                }
-              });
-            }
-          },
-          error: () => {
-            this.snackbar.open('Error accessing cart', 'Close', {
-              duration: 3000,
-              horizontalPosition: 'right',
-              verticalPosition: 'top'
-            });
-          }
+    // Add product to cart
+    this.cartService.addToCart({ product: this.product, quantity: 1 }).subscribe({
+      next: () => {
+        this.snackbar.open('Added to Cart', '', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
         });
       },
       error: () => {
-        this.snackbar.open('Authentication error', 'Close', {
+        this.snackbar.open('Error adding to cart', 'Close', {
           duration: 3000,
           horizontalPosition: 'right',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
         });
-      }
+      },
     });
   }
+
+// Add this method to the existing component
+isEditing = false;
+
+toggleEditMode(): void {
+  this.isEditing = !this.isEditing;
+}
+
+updateProduct(): void {
+  this.productService.updateProduct(this.productId, this.product).subscribe({
+    next: () => {
+      this.snackbar.open('Product updated successfully!', '', {
+        duration: 2000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+      this.isEditing = false; // Exit edit mode
+    },
+    error: () => {
+      this.snackbar.open('Error updating product.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    },
+  });
+}
 }

@@ -1,4 +1,3 @@
-// login.component.ts
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
@@ -26,18 +25,16 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.error = '';
-      
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/products']);
-        },
-        error: (err) => {
-          this.error = 'Invalid email or password';
-          console.error('Login error:', err);
-        }
-      });
-    }
+    const credentials = this.loginForm.value;
+    this.authService.login(credentials).subscribe({
+      next: () => {
+        // Route all users to the products page
+        this.router.navigate(['/products']);
+      },
+      error: () => {
+        this.error = 'Invalid email or password';
+        alert('Login error: ' + this.error);
+      }
+    });
   }
 }

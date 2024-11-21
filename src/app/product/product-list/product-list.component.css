@@ -139,6 +139,73 @@ mat-card-subtitle {
   color: #1e293b;
 }
 
+/* Admin Add Button */
+.admin-actions button {
+  font-weight: 600;
+  border-radius: 8px;
+  text-transform: capitalize;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.admin-actions button:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Admin Buttons (Edit/Delete) */
+/* Admin Buttons Container */
+.admin-buttons {
+  display: flex;
+  justify-content: space-between; /* Creates space between buttons */
+  align-items: center;           /* Align buttons vertically */
+  margin-top: 1rem;              /* Space above the buttons */
+  padding: 0.5rem;               /* Add padding for better aesthetics */
+}
+
+/* Individual Buttons */
+.admin-buttons button {
+  flex: 1;                       /* Ensure buttons take equal space */
+  margin: 0 0.25rem;             /* Add horizontal spacing between buttons */
+  font-weight: 600;
+  border-radius: 8px;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Delete Button Styling */
+.admin-buttons button[color='warn'] {
+  background-color: #e57373;
+  color: white;
+}
+
+.admin-buttons button[color='warn']:hover {
+  background-color: #d32f2f;
+}
+
+/* Edit Button Styling */
+.admin-buttons button[color='accent'] {
+  background-color: #64b5f6;
+  color: white;
+}
+
+.admin-buttons button[color='accent']:hover {
+  background-color: #1976d2;
+}
+
+
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {

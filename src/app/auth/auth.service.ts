@@ -1,59 +1,117 @@
-// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user';
+import { RegisterInput } from '../models/register-input';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiURL = environment.apiURL;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    // Check localStorage on initialization
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      this.currentUserSubject.next(JSON.parse(storedUser));
-    }
-  }
+  constructor(private http: HttpClient) {}
 
-  register(userData: User): Observable<User> {
-    return this.http.post<User>(`${this.apiURL}/register`, userData).pipe(
-      tap(user => {
-        this.setCurrentUser(user);
-      })
-    );
+  /**
+   * Register a new user.
+   * @param userData - Registration input.
+   * @returns Observable<User>
+   */
+  register(userData: RegisterInput): Observable<User> {
+    return this.http
+      .post<User>(`${this.apiURL}/register`, userData, { withCredentials: true })
+      .pipe(
+        tap((user) => {
+          console.log('Register response:', user); // Debugging
+          this.currentUserSubject.next(user); // Automatically log in the user
+        }),
+        catchError((error) => {
+          console.error('Registration failed:', error);
+          throw error;
+        })
+      );
   }
+  
 
+  /**
+   * Log in the user.
+   * @param credentials - Email and password.
+   * @returns Observable<any>
+   */
   login(credentials: { email: string; password: string }): Observable<User> {
-    return this.http.post<User>(`${this.apiURL}/login`, credentials).pipe(
-      tap(user => {
-        this.setCurrentUser(user);
+    return this.http
+      .post<User>(`${this.apiURL}/login`, credentials, { withCredentials: true })
+      .pipe(
+        tap((user) => {
+          this.currentUserSubject.next(user); // Update current user state after successful login
+        }),
+        catchError((error) => {
+          console.error('Login failed:', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * Log out the current user.
+   * @returns Observable<void>
+   */
+  logout(): Observable<void> {
+    return this.http
+      .post<void>(`${this.apiURL}/logout`, {}, { withCredentials: true })
+      .pipe(
+        tap(() => {
+          this.currentUserSubject.next(null); // Clear current user state on logout
+        }),
+        catchError((error) => {
+          console.error('Logout failed:', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * Check the current authentication status.
+   * @returns Observable<any>
+   */
+  checkAuthStatus(): Observable<any> {
+    return this.http.get<any>(`${this.apiURL}/auth-check`, { withCredentials: true }).pipe(
+      tap((response) => {
+        this.currentUserSubject.next(response.user); // Restore user state if session is valid
+      }),
+      catchError(() => {
+        this.currentUserSubject.next(null); // Clear user state if session is invalid
+        return of(null);
       })
     );
   }
 
-  logout(): void {
-    localStorage.removeItem('currentUser'); // Clear stored user data
-    this.currentUserSubject.next(null);
-  }
-
-  private setCurrentUser(user: User): void {
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    this.currentUserSubject.next(user);
-  }
-
-  // New Methods
-
-  isLoggedIn(): boolean {
-    return this.currentUserSubject.value !== null;
-  }
-
+  /**
+   * Get the current user's username.
+   * @returns string
+   */
   getUsername(): string {
-    return this.currentUserSubject.value ? this.currentUserSubject.value.userName : "";
+    return this.currentUserSubject.value ? this.currentUserSubject.value.userName : '';
+  }
+
+  /**
+   * Fetch current user details from the backend and update the user state.
+   * @returns Observable<User>
+   */
+  fetchCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiURL}/auth-check`, { withCredentials: true }).pipe(
+      tap((user) => {
+        this.currentUserSubject.next(user); // Update user state after fetching details
+      }),
+      catchError((error) => {
+        console.error('Failed to fetch current user:', error);
+        this.currentUserSubject.next(null);
+        throw error;
+      })
+    );
   }
 }

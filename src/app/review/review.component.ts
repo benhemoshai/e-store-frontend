@@ -3,64 +3,81 @@ import { ActivatedRoute } from '@angular/router';
 import { ReviewService } from './review.service'; // Adjust path as necessary
 import { AuthService } from '../auth/auth.service'; // Adjust to the correct path
 
-
-
-
 @Component({
   selector: 'app-review',
   templateUrl: './review.component.html',
-  styleUrls: ['./review.component.css']
+  styleUrls: ['./review.component.css'],
 })
 export class ReviewComponent implements OnInit {
-  @Input() productId!: string | null; // Keep the product ID
+  @Input() productId!: string | null; // Product ID passed as an input
   reviews: any[] = []; // Array to hold reviews
-  newReview = { name: '', rating: 0, comment: '' }; // Initialize rating as a number
+  newReview = { name: '', rating: 0, comment: '' }; // New review object
+  isLoggedIn = false; // Tracks login state
 
   constructor(
     private route: ActivatedRoute,
     private reviewService: ReviewService,
-    private authService: AuthService // Inject the ReviewService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.productId = this.route.snapshot.paramMap.get('id'); // Get product ID from route
-    this.getReviews(); // Load reviews on initialization
-    if (this.authService.isLoggedIn()) {
-      this.newReview.name = this.authService.getUsername();
+    // Fetch product ID from the route if not passed as input
+    if (!this.productId) {
+      this.productId = this.route.snapshot.paramMap.get('id');
     }
+
+    // Load reviews
+    this.getReviews();
+
+    // Subscribe to authentication state
+    this.authService.currentUser$.subscribe((user) => {
+      this.isLoggedIn = !!user; // Update login state
+      this.newReview.name = user?.userName || ''; // Set the user's name for the review
+    });
   }
 
   getReviews(): void {
     if (this.productId) {
-      // Use ReviewService to fetch reviews
-      this.reviewService.getReviews(this.productId).subscribe(
-        (data) => {
-          this.reviews = data || []; // Set reviews data
+      // Fetch reviews using ReviewService
+      this.reviewService.getReviews(this.productId).subscribe({
+        next: (data) => {
+          this.reviews = data || []; // Populate reviews array
         },
-        (error) => {
-          console.error('Error fetching reviews:', error); // Log errors if any
-        }
-      );
+        error: (error) => {
+          console.error('Error fetching reviews:', error); // Log errors
+        },
+      });
     }
   }
 
   addReview(): void {
-
-    if (!this.authService.isLoggedIn()) {
+    if (!this.isLoggedIn) {
       alert('Please log in to add a review.');
       return;
     }
-    else if (this.productId && this.newReview.rating > 0 && this.newReview.comment) { // Ensure rating is greater than 0
-      // Use ReviewService to add a new review
-      this.reviewService.addReview(this.productId, this.newReview).subscribe(
-        () => {
-          this.getReviews(); // Refresh the reviews after adding a new one
-          this.newReview = { name: this.authService.getUsername() , rating: 0, comment: '' }; // Reset the new review
-        },
-        (error) => {
-          console.error('Error adding review:', error); // Log errors if any
-        }
-      );
+
+    if (!this.productId || this.newReview.rating <= 0 || !this.newReview.comment.trim()) {
+      alert('Please provide a valid rating and comment.');
+      return;
     }
+
+    // Add the review using ReviewService
+    this.reviewService.addReview(this.productId, this.newReview).subscribe({
+      next: () => {
+        this.getReviews(); // Refresh reviews after adding
+        this.resetNewReview(); // Reset the new review form
+      },
+      error: (error) => {
+        console.error('Error adding review:', error); // Log errors
+      },
+    });
+  }
+
+  private resetNewReview(): void {
+    this.newReview = {
+      name: this.authService.getUsername() || '', // Pre-fill the name field if logged in
+      rating: 0,
+      comment: '',
+    };
   }
 }

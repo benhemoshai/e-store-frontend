@@ -3,5 +3,6 @@ export interface User {
     userId?: any;
     userName: any; // Change from name to userName
     email: any,
-    password: any
+    password: any,
+    role: string;
   }

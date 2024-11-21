@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
 import { Product } from '../../models/product';
 import { Router } from '@angular/router'; // Import Router
-
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-product-list',
@@ -14,8 +14,9 @@ export class ProductListComponent implements OnInit{
   products: Product[] = [];
   filteredProducts : Product [] = [];
   sortOrder : string = ""; 
+  isAdmin: boolean = false;
 
-constructor(private productService: ProductService, 
+constructor(private productService: ProductService, private authService: AuthService,
   private router: Router){
 }
 
@@ -23,7 +24,15 @@ constructor(private productService: ProductService,
     this.productService.getProducts().subscribe(data => {
       this.products = data;
       this.filteredProducts = data;
-    })
+    });
+
+    this.authService.currentUser$.subscribe((user) => {
+      this.isAdmin = user?.role === 'admin';
+    });
+   }
+
+   deleteProduct():void{
+    
    }
   
    applyFilter(event: Event) : void {

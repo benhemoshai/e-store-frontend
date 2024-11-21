@@ -1,4 +1,15 @@
 <div class="container">
+  <!-- Admin Add Product Button -->
+  <div *ngIf="isAdmin" class="admin-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      [routerLink]="['/admin/products/add']"
+    >
+      <mat-icon>add</mat-icon> Add Product
+    </button>
+  </div>
+
   <div class="search-sort-section">
     <mat-form-field appearance="outline">
       <mat-label>Search Products</mat-label>
@@ -32,6 +43,21 @@
             {{ product.price | currency : "USD" }}
           </mat-card-subtitle>
         </mat-card-content>
+
+        <!-- Admin Controls -->
+        <div *ngIf="isAdmin" class="admin-buttons">
+          <button mat-raised-button color="warn" (click)="deleteProduct()">
+            <mat-icon>delete</mat-icon> Delete
+          </button>
+          <button
+            mat-raised-button
+            color="accent"
+            [routerLink]="['/admin/products', product._id, 'edit']"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>edit</mat-icon> Edit
+          </button>
+        </div>
       </mat-card>
     </div>
   </div>

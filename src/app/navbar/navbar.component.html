@@ -3,38 +3,43 @@
   <mat-toolbar-row class="nav-container">
     <!-- Brand Section -->
     <div class="brand-section">
-      <a href="/" class="brand">
+      <a routerLink="/" class="brand">
         <mat-icon>palette</mat-icon>
         <span>Animal Arts</span>
       </a>
     </div>
 
-    <!-- Hamburger Menu Icon for Mobile -->
+    <!-- Mobile Navigation -->
     <div *ngIf="isMobile" class="hamburger-menu">
       <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
         <mat-icon>menu</mat-icon>
       </button>
       <mat-menu #mobileMenu="matMenu">
+        <!-- Products Link -->
         <button mat-menu-item routerLink="/products" routerLinkActive="active">
           <mat-icon>grid_view</mat-icon>
           <span>Products</span>
         </button>
-        <!-- Dynamic Cart Link -->
-        <button
-          mat-menu-item
-          [routerLink]="['/cart', userId]"
-          routerLinkActive="active"
-        >
+
+        <!-- Cart Link -->
+        <button mat-menu-item routerLink="/cart" routerLinkActive="active">
           <mat-icon>shopping_cart</mat-icon>
           <span>Cart</span>
         </button>
+
+        <!-- User Options -->
         <ng-container *ngIf="isLoggedIn; else loggedOut">
-          <button mat-menu-item>{{ userName }}</button>
+          <button mat-menu-item disabled>
+            <mat-icon>person</mat-icon>
+            <span>{{ userName }}</span>
+          </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
           </button>
         </ng-container>
+
+        <!-- Login/Sign Up -->
         <ng-template #loggedOut>
           <button
             mat-menu-item
@@ -56,17 +61,21 @@
       </mat-menu>
     </div>
 
-    <!-- Default Navigation Links for Desktop -->
+    <!-- Desktop Navigation -->
     <nav *ngIf="!isMobile" class="nav-links">
+      <!-- Products Link -->
       <a mat-button routerLink="/products" routerLinkActive="active">
         <mat-icon>grid_view</mat-icon>
         <span>Products</span>
       </a>
-      <!-- Dynamic Cart Link -->
-      <a mat-button [routerLink]="['/cart', userId]" routerLinkActive="active">
+
+      <!-- Cart Link -->
+      <a mat-button routerLink="/cart" routerLinkActive="active">
         <mat-icon>shopping_cart</mat-icon>
         <span>Cart</span>
       </a>
+
+      <!-- User Options -->
       <ng-container *ngIf="isLoggedIn; else loggedOut">
         <span class="user-name">{{ userName }}</span>
         <a mat-button color="accent" class="logout-button" (click)="logout()">
@@ -74,6 +83,8 @@
           <span>Logout</span>
         </a>
       </ng-container>
+
+      <!-- Login/Sign Up -->
       <ng-template #loggedOut>
         <a
           mat-button
