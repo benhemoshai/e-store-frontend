@@ -3,12 +3,19 @@
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Search and Sort Section */
-.search-sort-section {
+/* Flex container for alignment */
+.search-sort-actions {
   display: flex;
-  gap: 1.5rem;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.search-sort-section {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
   flex-wrap: wrap;
 }
 
@@ -18,6 +25,22 @@ mat-form-field {
 
 .sort-drop {
   width: 200px;
+}
+
+/* Admin actions */
+.admin-actions {
+  display: flex;
+  align-items: center;
+}
+
+.add-product-button {
+  width: 250px; /* Match the width of the search bar */
+  height: 56px; /* Match the height of mat-form-field */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 /* Collection Title */
@@ -49,6 +72,7 @@ h4::after {
   gap: 2rem;
   padding: 1rem 0;
 }
+
 
 /* Product Card */
 .product-card {

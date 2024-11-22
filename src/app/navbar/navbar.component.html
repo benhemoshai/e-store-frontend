@@ -21,8 +21,19 @@
           <span>Products</span>
         </button>
 
+        <!-- Admin Label -->
+        <button mat-menu-item *ngIf="isAdmin" disabled>
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>Admin</span>
+        </button>
+
         <!-- Cart Link -->
-        <button mat-menu-item routerLink="/cart" routerLinkActive="active">
+        <button
+          mat-menu-item
+          *ngIf="!isAdmin"
+          routerLink="/cart"
+          routerLinkActive="active"
+        >
           <mat-icon>shopping_cart</mat-icon>
           <span>Cart</span>
         </button>
@@ -69,8 +80,18 @@
         <span>Products</span>
       </a>
 
+      <!-- Admin Label -->
+      <span *ngIf="isAdmin" class="admin-label">
+        <mat-icon>admin_panel_settings</mat-icon> Admin
+      </span>
+
       <!-- Cart Link -->
-      <a mat-button routerLink="/cart" routerLinkActive="active">
+      <a
+        mat-button
+        *ngIf="!isAdmin"
+        routerLink="/cart"
+        routerLinkActive="active"
+      >
         <mat-icon>shopping_cart</mat-icon>
         <span>Cart</span>
       </a>

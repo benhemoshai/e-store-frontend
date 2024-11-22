@@ -17,6 +17,7 @@ export class ProductComponent implements OnInit {
   isLoggedIn = false;
   isAdmin = false; // Track if the user is an admin
   showReviews = false;
+  isEditing = false;
 
   constructor(
     private productService: ProductService,
@@ -90,9 +91,6 @@ export class ProductComponent implements OnInit {
     });
   }
 
-// Add this method to the existing component
-isEditing = false;
-
 toggleEditMode(): void {
   this.isEditing = !this.isEditing;
 }
@@ -116,4 +114,5 @@ updateProduct(): void {
     },
   });
 }
+
 }

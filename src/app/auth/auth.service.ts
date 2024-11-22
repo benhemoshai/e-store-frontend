@@ -47,10 +47,15 @@ export class AuthService {
       .post<User>(`${this.apiURL}/login`, credentials, { withCredentials: true })
       .pipe(
         tap((user) => {
-          this.currentUserSubject.next(user); // Update current user state after successful login
+          console.log('Login response:', user);
+          this.currentUserSubject.next(user); // Immediately update user state
+          
+          // Optional: Trigger a quick check to ensure persistence
+          this.checkAuthStatus().subscribe();
         }),
         catchError((error) => {
           console.error('Login failed:', error);
+          this.currentUserSubject.next(null);
           throw error;
         })
       );
@@ -79,17 +84,18 @@ export class AuthService {
    * @returns Observable<any>
    */
   checkAuthStatus(): Observable<any> {
-    return this.http.get<any>(`${this.apiURL}/auth-check`, { withCredentials: true }).pipe(
+    return this.http.get<{user: User}>(`${this.apiURL}/auth-check`, { withCredentials: true }).pipe(
       tap((response) => {
-        this.currentUserSubject.next(response.user); // Restore user state if session is valid
+        console.log('Auth check user:', response.user);
+        this.currentUserSubject.next(response.user); 
       }),
-      catchError(() => {
-        this.currentUserSubject.next(null); // Clear user state if session is invalid
+      catchError((error) => {
+        console.error('Auth check error:', error);
+        this.currentUserSubject.next(null);
         return of(null);
       })
     );
   }
-
   /**
    * Get the current user's username.
    * @returns string

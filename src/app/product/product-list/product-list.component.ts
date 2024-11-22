@@ -31,9 +31,18 @@ constructor(private productService: ProductService, private authService: AuthSer
     });
    }
 
-   deleteProduct():void{
-    
-   }
+   deleteProduct(productId: string): void {
+    this.productService.deleteProduct(productId).subscribe({
+      next: () => {
+        alert('Product deleted successfully!');
+        // Update the product lists by filtering out the deleted product
+        this.products = this.products.filter(product => product._id !== productId);
+        this.filteredProducts = this.filteredProducts.filter(product => product._id !== productId);
+      },
+      error: (error) => console.error('Error deleting product:', error),
+    });
+  }
+  
   
    applyFilter(event: Event) : void {
     let searchTerm = (event.target as HTMLInputElement).value;

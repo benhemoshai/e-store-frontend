@@ -11,25 +11,28 @@ import { Subscription } from 'rxjs';
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   userName: string | null = null;
+  isAdmin = false; // Track if the user is an admin
   private userSubscription?: Subscription;
   isMobile: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // Restore session and authentication state
-    this.authService.checkAuthStatus().subscribe(() => {
-      // Subscribe to authentication state changes
-      this.userSubscription = this.authService.currentUser$.subscribe((user) => {
-        this.isLoggedIn = !!user; // Update login state dynamically
-        this.userName = user?.userName || null; // Update username dynamically
-        console.log('Navbar updated userName:', this.userName); // Debugging
-      });
-    });
-  
-  
+    // Initial check to trigger authentication status immediately
+    this.authService.checkAuthStatus().subscribe();
 
-    // Initialize screen size
+    this.userSubscription = this.authService.currentUser$.subscribe((user) => {
+      console.log('Full user object:', user);
+      
+      this.isLoggedIn = !!user;
+      this.userName = user?.userName || user?.email || null;
+      this.isAdmin = user?.role === 'admin'; // Check if the user is an admin
+      
+      console.log('Navbar isLoggedIn:', this.isLoggedIn);
+      console.log('Navbar userName:', this.userName);
+      console.log('Navbar isAdmin:', this.isAdmin);
+    });
+
     this.checkScreenSize();
   }
 

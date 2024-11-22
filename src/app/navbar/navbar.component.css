@@ -169,6 +169,17 @@
   color: #3498db; /* Change text color on hover */
 }
 
+.admin-label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #3498db;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+
 /* Logout Button Styles */
 button {
   background-color: transparent; /* Transparent background */
