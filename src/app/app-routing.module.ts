@@ -15,7 +15,6 @@ const routes: Routes = [
   {path: 'products/:id', component: ProductComponent},
   { path: 'cart', component: CartViewComponent },
   { path: 'admin/products/add', component: AddProductComponent, canActivate: [RoleGuard] }, // Add Product
-  { path: 'admin/products/:id/edit', component: EditProductComponent, canActivate: [RoleGuard] }, // Edit Product
   { path: 'auth/login', component: LoginComponent },
   { path: 'auth/register', component: RegisterComponent },
 ];

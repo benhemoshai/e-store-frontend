@@ -1,51 +1,54 @@
+<!-- review.component.html -->
 <div class="review-container">
   <h2>Product Reviews</h2>
-  <div class="add-review-card">
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline">
+      <mat-label>Sort Reviews</mat-label>
+      <mat-select
+        [(value)]="sortOption"
+        (selectionChange)="onSortChange($event.value)"
+      >
+        <mat-option value="recent">Most Recent</mat-option>
+        <mat-option value="rating">Highest Rating</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Add Review Section -->
+  <div class="add-review-card" *ngIf="!isAdmin">
     <h3>Add a Review</h3>
-    <form (ngSubmit)="addReview()" class="review-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input
-            type="text"
-            [(ngModel)]="newReview.name"
-            name="name"
-            required
-            placeholder="Your name"
-          />
-        </div>
-        <div class="form-group">
-          <label for="rating">Rating:</label>
-          <input
-            type="number"
-            [(ngModel)]="newReview.rating"
-            name="rating"
-            required
-            min="1"
-            max="5"
-            placeholder="1-5"
-          />
-        </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name:</label>
+        <input [(ngModel)]="newReview.name" disabled />
       </div>
       <div class="form-group">
-        <label for="comment">Comment:</label>
-        <textarea
-          [(ngModel)]="newReview.comment"
-          name="comment"
-          required
-          rows="5"
-        ></textarea>
+        <label>Rating:</label>
+        <input type="number" [(ngModel)]="newReview.rating" min="1" max="5" />
       </div>
-      <button type="submit" class="submit-button">Submit Review</button>
-    </form>
+    </div>
+    <div class="form-group">
+      <label>Comment:</label>
+      <textarea [(ngModel)]="newReview.comment"></textarea>
+    </div>
+    <button mat-raised-button color="primary" (click)="addReview()">
+      Submit Review
+    </button>
   </div>
-  <div *ngIf="reviews.length === 0">
-    <p>No reviews yet. Be the first to review!</p>
-  </div>
-  <div *ngFor="let review of reviews" class="review-card">
+
+  <!-- No Reviews Message -->
+  <div *ngIf="reviews.length === 0" class="no-reviews">No reviews yet.</div>
+
+  <!-- Reviews List -->
+  <div class="review-card" *ngFor="let review of reviews">
     <div class="review-header">
       <span class="reviewer-name">{{ review.name }}</span>
-      <span class="review-rating">Rating: {{ review.rating }}</span>
+      <span class="review-rating">
+        <mat-icon class="gold-star">star</mat-icon>
+        <span class="rating-number">{{ review.rating }}</span>
+      </span>
     </div>
     <p class="review-comment">{{ review.comment }}</p>
     <em class="review-date">{{ review.date | date }}</em>
