@@ -1,150 +1,171 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../cart.service';
 import { CartItem } from '../../models/cart-item.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-cart-view',
   templateUrl: './cart-view.component.html',
-  styleUrls: ['./cart-view.component.css']
+  styleUrls: ['./cart-view.component.css'],
 })
 export class CartViewComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   totalPrice: number = 0;
-  userId: string | null = null;
-  routeSubscription: Subscription | undefined;
+  isLoggedIn: boolean = false;
+  private authSubscription?: Subscription;
 
   constructor(
     private cartService: CartService,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute // Inject ActivatedRoute
+    private authService: AuthService // Inject AuthService
   ) {}
 
   ngOnInit(): void {
-    // Get userId from route parameters
-    this.routeSubscription = this.route.paramMap.subscribe(params => {
-      this.userId = params.get('userId');
-      if (this.userId) {
-        this.loadCartItems();
+    // Subscribe to authentication state
+    this.authSubscription = this.authService.currentUser$.subscribe((user) => {
+      this.isLoggedIn = !!user; // Check if user is logged in
+      if (this.isLoggedIn) {
+        this.loadCartItems(); // Load cart items if logged in
       } else {
-        this.snackBar.open('User ID not found in the route', '', {
+        this.snackBar.open('You must log in to view your cart.', '', {
           duration: 3000,
           horizontalPosition: 'right',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
         });
       }
     });
   }
 
   loadCartItems(): void {
-    if (this.userId) {
-      this.cartService.getCartItems(this.userId).subscribe(data => {
+    this.cartService.getCartItems().subscribe({
+      next: (data) => {
         this.cartItems = data;
         this.totalPrice = this.getTotalPrice();
-      });
-    }
+      },
+      error: () => {
+        this.snackBar.open('Error fetching cart items', '', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      },
+    });
   }
 
   getTotalPrice(): number {
-    return this.cartItems.reduce((total, item) => 
-      total + item.product.price * (item.quantity || 1), 0);
+    return this.cartItems.reduce(
+      (total, item) => total + item.product.price * (item.quantity || 1),
+      0
+    );
   }
 
   removeItem(item: CartItem): void {
-    if (this.userId && item.product?._id) {
-      this.cartService.removeFromCart(this.userId, item.product._id).subscribe({
+    if (item.product?._id) {
+      this.cartService.removeFromCart(item.product._id).subscribe({
         next: () => {
           this.loadCartItems();
           this.snackBar.open('Item removed from cart', '', {
             duration: 2000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'top',
           });
         },
         error: () => {
           this.snackBar.open('Error removing item from cart', '', {
             duration: 2000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'top',
           });
-        }
+        },
       });
     }
   }
 
   clearCart(): void {
-    if (this.userId) {
-      this.cartService.clearCart(this.userId).subscribe(() => {
+    this.cartService.clearCart().subscribe({
+      next: () => {
         this.cartItems = [];
         this.totalPrice = 0;
-      });
-    }
+      },
+      error: () => {
+        this.snackBar.open('Error clearing cart', '', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      },
+    });
   }
 
   incrementQuantity(item: CartItem): void {
-    if (this.userId) {
-      item.quantity++;
-      this.cartService.updateCartItem(this.userId, item).subscribe({
-        next: () => {
-          this.totalPrice = this.getTotalPrice();
-          this.snackBar.open('Item quantity updated', '', {
-            duration: 2000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top'
-          });
-        },
-        error: () => {
-          this.snackBar.open('Error updating item quantity', '', {
-            duration: 2000,
-            horizontalPosition: 'right',
-            verticalPosition: 'top'
-          });
-        }
-      });
-    }
+    item.quantity++;
+    this.cartService.updateCartItem(item).subscribe({
+      next: () => {
+        this.totalPrice = this.getTotalPrice();
+        this.snackBar.open('Item quantity updated', '', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      },
+      error: () => {
+        this.snackBar.open('Error updating item quantity', '', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      },
+    });
   }
 
   decrementQuantity(item: CartItem): void {
-    if (this.userId && item.quantity > 1) {
+    if (item.quantity > 1) {
       item.quantity--;
-      this.cartService.updateCartItem(this.userId, item).subscribe({
+      this.cartService.updateCartItem(item).subscribe({
         next: () => {
           this.totalPrice = this.getTotalPrice();
           this.snackBar.open('Item quantity updated', '', {
             duration: 2000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'top',
           });
         },
         error: () => {
           this.snackBar.open('Error updating item quantity', '', {
             duration: 2000,
             horizontalPosition: 'right',
-            verticalPosition: 'top'
+            verticalPosition: 'top',
           });
-        }
+        },
       });
     }
   }
 
   checkOut(): void {
-    if (this.userId) {
-      this.cartService.checkOut(this.userId, this.cartItems).subscribe(() => {
+    this.cartService.checkOut(this.cartItems).subscribe({
+      next: () => {
         this.snackBar.open('Checkout complete', '', {
           duration: 2000,
           horizontalPosition: 'right',
-          verticalPosition: 'top'
+          verticalPosition: 'top',
         });
         this.clearCart();
-      });
-    }
+      },
+      error: () => {
+        this.snackBar.open('Error during checkout', '', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      },
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.routeSubscription) {
-      this.routeSubscription.unsubscribe();
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
     }
   }
 }

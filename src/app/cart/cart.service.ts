@@ -7,13 +7,13 @@ import { CartItem } from '../models/cart-item.model';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
-  private apiCartURL = environment.apiURL + '/cart';
-  private apiCheckoutURL = environment.apiURL + '/checkout';
+  private apiCartURL = `${environment.apiURL}/cart`;
+  private apiCheckoutURL = `${environment.apiURL}/checkout`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An error occurred';
@@ -31,57 +31,41 @@ export class CartService {
     return throwError(() => new Error(errorMessage));
   }
 
-  addToCart(userId: string | null, cartItem: CartItem): Observable<Product> {
-    if (!userId) {
-      return throwError(() => new Error('User not authenticated'));
-    }
-    const url = `${this.apiCartURL}/${userId}`;
-    return this.http.post<Product>(url, cartItem)
+  addToCart(cartItem: CartItem): Observable<Product> {
+    return this.http
+      .post<Product>(this.apiCartURL, cartItem, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 
-  removeFromCart(userId: string | null, productId: string): Observable<void> {
-    if (!userId) {
-      return throwError(() => new Error('User not authenticated'));
-    }
-    const url = `${this.apiCartURL}/${userId}/${productId}`;
-    return this.http.delete<void>(url)
+  removeFromCart(productId: string): Observable<void> {
+    const url = `${this.apiCartURL}/${productId}`;
+    return this.http
+      .delete<void>(url, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 
-  updateCartItem(userId: string | null, cartItem: CartItem): Observable<CartItem> {
-    if (!userId) {
-      return throwError(() => new Error('User not authenticated'));
-    }
-    const url = `${this.apiCartURL}/${userId}/${cartItem.product._id}`;
-    return this.http.put<CartItem>(url, cartItem)
+  updateCartItem(cartItem: CartItem): Observable<CartItem> {
+    const url = `${this.apiCartURL}/${cartItem.product._id}`;
+    return this.http
+      .put<CartItem>(url, cartItem, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 
-  getCartItems(userId: string | null): Observable<CartItem[]> {
-    if (!userId) {
-      return throwError(() => new Error('User not authenticated'));
-    }
-    const url = `${this.apiCartURL}/${userId}`;
-    return this.http.get<CartItem[]>(url)
+  getCartItems(): Observable<CartItem[]> {
+    return this.http
+      .get<CartItem[]>(this.apiCartURL, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 
-  clearCart(userId: string | null): Observable<void> {
-    if (!userId) {
-      return throwError(() => new Error('User not authenticated'));
-    }
-    const url = `${this.apiCartURL}/${userId}`;
-    return this.http.delete<void>(url)
+  clearCart(): Observable<void> {
+    return this.http
+      .delete<void>(this.apiCartURL, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 
-  checkOut(userId: string | null, cartItems: CartItem[]): Observable<void> {
-    if (!userId) {
-      return throwError(() => new Error('User not authenticated'));
-    }
-    const url = `${this.apiCheckoutURL}/${userId}`;
-    return this.http.post<void>(url, cartItems)
+  checkOut(cartItems: CartItem[]): Observable<void> {
+    return this.http
+      .post<void>(this.apiCheckoutURL, cartItems, { withCredentials: true })
       .pipe(catchError(this.handleError));
   }
 }

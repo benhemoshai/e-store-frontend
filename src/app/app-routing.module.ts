@@ -5,18 +5,20 @@ import { CartViewComponent } from './cart/cart-view/cart-view.component';
 import { ProductComponent } from './product/product/product.component';
 import { ReviewComponent } from './review/review.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { LoginComponent
-
- } from './auth/login/login.component';
+import { LoginComponent} from './auth/login/login.component';
+import { AddProductComponent } from './product/add-product/add-product.component';
+import { EditProductComponent } from './product/edit-product/edit-product.component';
+import { RoleGuard } from './guards/role.guard';
 const routes: Routes = [
-  {path:'', redirectTo: '/products', pathMatch: 'full'},
-  {path: 'products', component: ProductListComponent},
-  {path: 'cart/:userId', component: CartViewComponent},
+  { path: '', redirectTo: '/products', pathMatch: 'full' },
+  { path: 'products', component: ProductListComponent },
   {path: 'products/:id', component: ProductComponent},
-  {path: 'products/:id/reviews', component: ReviewComponent},
-  {path: 'auth/register', component: RegisterComponent},
-  {path: 'auth/login', component: LoginComponent}
+  { path: 'cart', component: CartViewComponent },
+  { path: 'admin/products/add', component: AddProductComponent, canActivate: [RoleGuard] }, // Add Product
+  { path: 'auth/login', component: LoginComponent },
+  { path: 'auth/register', component: RegisterComponent },
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

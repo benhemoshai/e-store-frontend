@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="form-container">
+    <h2>Add Product</h2>
+    <form class="product-form" (ngSubmit)="addProduct()">
+      <!-- Product Name -->
+      <mat-form-field appearance="outline">
+        <mat-label>Product Name</mat-label>
+        <input
+          matInput
+          placeholder="Enter product name"
+          [(ngModel)]="product.name"
+          name="name"
+          required
+        />
+      </mat-form-field>
+
+      <!-- Description -->
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          rows="4"
+          placeholder="Enter product description"
+          [(ngModel)]="product.description"
+          name="description"
+        ></textarea>
+      </mat-form-field>
+
+      <!-- Price -->
+      <mat-form-field appearance="outline">
+        <mat-label>Price</mat-label>
+        <input
+          matInput
+          type="number"
+          placeholder="Enter product price"
+          [(ngModel)]="product.price"
+          name="price"
+          required
+        />
+      </mat-form-field>
+
+      <!-- Image URL -->
+      <mat-form-field appearance="outline">
+        <mat-label>Image URL</mat-label>
+        <input
+          matInput
+          placeholder="Enter image URL"
+          [(ngModel)]="product.image_url"
+          name="image_url"
+        />
+      </mat-form-field>
+
+      <!-- Image Preview -->
+      <div class="image-preview" *ngIf="product.image_url">
+        <h4>Image Preview:</h4>
+        <img
+          [src]="product.image_url"
+          [alt]="product.name || 'Product Image'"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          class="submit-button"
+          type="submit"
+        >
+          Add Product
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

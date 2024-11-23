@@ -30,6 +30,18 @@
   border-radius: 2px;
 }
 
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+}
+
+.filter-bar mat-form-field {
+  min-width: 250px;
+}
+
+/* Add Review Section */
 .add-review-card {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -46,19 +58,25 @@
   font-weight: 600;
 }
 
-.form-group {
+.add-review-card .form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.add-review-card .form-group {
+  flex: 1;
   margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.add-review-card .form-group label {
   display: block;
   color: #475569;
   margin-bottom: 0.5rem;
   font-weight: 500;
 }
 
-.form-group input[type="text"],
-.form-group input[type="number"] {
+.add-review-card .form-group input,
+.add-review-card .form-group textarea {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid #e2e8f0;
@@ -68,26 +86,14 @@
   background-color: #f8fafc;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.add-review-card .form-group input:focus,
+.add-review-card .form-group textarea:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
 
-textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 1rem;
-  resize: vertical;
-  min-height: 120px;
-  background-color: #f8fafc;
-  font-family: inherit;
-}
-
-.submit-button {
+.add-review-card button {
   background: linear-gradient(to right, #3498db, #2980b9);
   color: white;
   border: none;
@@ -99,19 +105,17 @@ textarea {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  width: 100%;
 }
 
-.submit-button:hover {
+.add-review-card button:hover {
   background: linear-gradient(to right, #2980b9, #2473a3);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
 }
-
-.submit-button:active {
-  transform: translateY(0);
+mat-icon {
+  font-size: 1.2rem;
 }
-
+/* Review Cards */
 .review-card {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -155,21 +159,20 @@ textarea {
 }
 
 .review-rating {
-  background-color: #edf2f7;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  color: #2d3748;
-  font-weight: 600;
-  font-size: 0.9rem;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.25rem; /* Space between the star and the number */
 }
 
-.review-rating::before {
-  content: '★';
-  color: #f59e0b;
-  margin-right: 0.25rem;
+.gold-star {
+  color: gold; /* Golden color for the star */
+  font-size: 1.5rem; /* Adjust size if needed */
+}
+
+.rating-number {
+  color: black; /* Black color for the number */
+  font-weight: bold; /* Optional: make the number bold */
+  font-size: 1.2rem; /* Adjust size to match the star */
 }
 
 .review-comment {
@@ -188,7 +191,7 @@ textarea {
   font-style: italic;
 }
 
-/* For empty reviews message */
+/* No Reviews Message */
 .no-reviews {
   text-align: center;
   padding: 2rem;
@@ -199,24 +202,24 @@ textarea {
   font-size: 1.1rem;
 }
 
-/* Responsive adjustments */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .review-container {
-      padding: 1.5rem;
+    padding: 1.5rem;
   }
-  
+
   .add-review-card,
   .review-card {
-      padding: 1rem;
+    padding: 1rem;
   }
-  
+
   .review-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
-  
+
   .review-rating {
-      align-self: flex-end;
+    align-self: flex-end;
   }
 }

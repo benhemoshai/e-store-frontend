@@ -178,6 +178,101 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Add these styles to your existing CSS */
+.update-product-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.update-product-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.update-product-form .form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #4a5568;
+  transition: border-color 0.3s ease;
+}
+
+.update-product-form .form-control:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.update-product-form textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.cancel-button {
+  background: #e2e8f0;
+  color: #2c3e50;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 1rem;
+}
+
+.cancel-button:hover {
+  background: #cbd5e0;
+  transform: translateY(-2px);
+}
+/* Ensure form inputs match existing styling */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-control.product-name {
+  font-size: 1.875rem;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+  font-weight: 700;
+  padding: 0.5rem;
+}
+
+.form-control.product-description {
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  min-height: 100px;
+}
+
+.form-control.product-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  padding: 0.5rem;
+}
+/* Admin-specific image sizing */
+.product-image.admin-image {
+  width: 300px;  /* Reduced width */
+  height: 300px; /* Fixed square aspect ratio */
+  margin: 0 auto; /* Center the image */
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.product-image.admin-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image covers entire area */
+}
+
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .page-container {
@@ -210,5 +305,11 @@
 
   .product-price {
       font-size: 1.75rem;
+  }
+
+  .update-product-form .cancel-button {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 1rem;
   }
 }
