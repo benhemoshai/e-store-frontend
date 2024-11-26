@@ -7,10 +7,12 @@
   ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
-        { "key": "Access-Control-Allow-Origin", "value":  "https://e-store-backend-8i6h.onrender.com" }
+        { "key": "Access-Control-Allow-Origin", "value": "https://e-store-c650f336290d.herokuapp.com" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
       ]
     }
   ]
