@@ -47,14 +47,13 @@ export class AuthService {
       .post<User>(`${this.apiURL}/login`, credentials, { withCredentials: true })
       .pipe(
         tap((user) => {
-          console.log('Login response:', user);
-          this.currentUserSubject.next(user); // Immediately update user state
-          
-          // Optional: Trigger a quick check to ensure persistence
-          this.checkAuthStatus().subscribe();
+          // Immediately trigger auth check after login
+          this.checkAuthStatus().subscribe({
+            next: () => console.log('Auth status verified after login'),
+            error: (err) => console.error('Auth check failed', err)
+          });
         }),
         catchError((error) => {
-          console.error('Login failed:', error);
           this.currentUserSubject.next(null);
           throw error;
         })
