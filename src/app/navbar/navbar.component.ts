@@ -17,25 +17,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    // Initial check to trigger authentication status immediately
-    this.authService.checkAuthStatus().subscribe();
-
-    this.userSubscription = this.authService.currentUser$.subscribe((user) => {
-      console.log('Full user object:', user);
-      
-      this.isLoggedIn = !!user;
-      this.userName = user?.userName || user?.email || null;
-      this.isAdmin = user?.role === 'admin'; // Check if the user is an admin
-      
-      console.log('Navbar isLoggedIn:', this.isLoggedIn);
-      console.log('Navbar userName:', this.userName);
-      console.log('Navbar isAdmin:', this.isAdmin);
-    });
+ ngOnInit(): void {
+  this.authService.currentUser$.subscribe((user) => {
+    this.isLoggedIn = !!user;
+    this.userName = user?.userName || null;
+    this.isAdmin = user?.role === 'admin';
+  });
 
     this.checkScreenSize();
   }
-
+  
   @HostListener('window:resize', [])
   onResize(): void {
     this.checkScreenSize();

@@ -14,6 +14,7 @@ import { MatIcon } from '@angular/material/icon';
 import { AuthModule } from './auth/auth.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MatMenuModule } from '@angular/material/menu'; // Import MatMenuModule
+import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { MatMenuModule } from '@angular/material/menu'; // Import MatMenuModule
     ReviewModule,
     MatIcon,
     AuthModule,
-    MatMenuModule
+    MatMenuModule,
+    AdminDashboardModule
   ],
   providers: [
     provideClientHydration(),

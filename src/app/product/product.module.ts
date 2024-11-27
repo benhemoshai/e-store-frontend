@@ -11,7 +11,6 @@ import { RouterLink } from '@angular/router';
 import { ReviewModule } from '../review/review.module';
 import { MatIcon } from '@angular/material/icon';
 import { AddProductComponent } from './add-product/add-product.component';
-import { EditProductComponent } from './edit-product/edit-product.component';
 import { FormsModule } from '@angular/forms';
 
 
@@ -21,7 +20,6 @@ import { FormsModule } from '@angular/forms';
     ProductListComponent,
     ProductComponent,
     AddProductComponent,
-    EditProductComponent,
   ],
   imports: [
     CommonModule,

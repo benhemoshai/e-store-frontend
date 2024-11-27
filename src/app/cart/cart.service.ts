@@ -11,7 +11,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class CartService {
   private apiCartURL = `${environment.apiURL}/cart`;
-  private apiCheckoutURL = `${environment.apiURL}/checkout`;
+  private apiCheckoutURL = `${this.apiCartURL}/checkout`;
 
   constructor(private http: HttpClient) {}
 
