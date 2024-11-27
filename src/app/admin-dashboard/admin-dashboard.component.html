@@ -1,0 +1,60 @@
+<div class="dashboard-container">
+  <!-- Metrics Section -->
+  <div class="metrics-container">
+    <div class="metric-card">
+      <h3>Total Sales</h3>
+      <mat-spinner *ngIf="loading" diameter="30"></mat-spinner>
+      <p *ngIf="!loading">${{ totalSales }}</p>
+    </div>
+    <div class="metric-card">
+      <h3>Active Users</h3>
+      <mat-spinner *ngIf="loading" diameter="30"></mat-spinner>
+      <p *ngIf="!loading">{{ activeUsers }}</p>
+    </div>
+
+    <div class="metric-card">
+      <h3>Average Product Rating</h3>
+      <mat-spinner *ngIf="loading" diameter="30"></mat-spinner>
+      <p *ngIf="!loading">{{ averageRating }}</p>
+    </div>
+  </div>
+
+  <!-- Charts Section-->
+  <div class="chart-container">
+    <h2>Top 5 Selling Products</h2>
+    <ngx-charts-bar-vertical
+      [view]="[700, 400]"
+      [scheme]="color"
+      [results]="topSellingProductsData"
+      [gradient]="false"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [xAxisLabel]="'Products'"
+      [yAxisLabel]="'Units Sold'"
+      [animations]="true"
+    >
+    </ngx-charts-bar-vertical>
+  </div>
+
+  <div class="chart-container">
+    <h2>Orders Status</h2>
+    <ngx-charts-bar-vertical
+      [view]="[700, 400]"
+      [scheme]="color"
+      [results]="orderStatusData"
+      [gradient]="false"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [xAxisLabel]="'Order Status'"
+      [yAxisLabel]="'Quantity'"
+      [animations]="true"
+    >
+    </ngx-charts-bar-vertical>
+  </div>
+</div>

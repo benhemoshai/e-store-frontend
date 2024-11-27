@@ -23,7 +23,7 @@ export class AuthService {
    */
   register(userData: RegisterInput): Observable<User> {
     return this.http
-      .post<User>(`${this.apiURL}/register`, userData, { withCredentials: true })
+      .post<User>(`${this.apiURL}/auth/register`, userData, { withCredentials: true })
       .pipe(
         tap((user) => {
           console.log('Register response:', user); // Debugging
@@ -44,14 +44,11 @@ export class AuthService {
    */
   login(credentials: { email: string; password: string }): Observable<User> {
     return this.http
-      .post<User>(`${this.apiURL}/login`, credentials, { withCredentials: true })
+      .post<User>(`${this.apiURL}/auth/login`, credentials, { withCredentials: true })
       .pipe(
         tap((user) => {
           console.log('Login response:', user);
           this.currentUserSubject.next(user); // Immediately update user state
-          
-          // Optional: Trigger a quick check to ensure persistence
-          this.checkAuthStatus().subscribe();
         }),
         catchError((error) => {
           console.error('Login failed:', error);
@@ -60,6 +57,7 @@ export class AuthService {
         })
       );
   }
+  
 
   /**
    * Log out the current user.
@@ -67,7 +65,7 @@ export class AuthService {
    */
   logout(): Observable<void> {
     return this.http
-      .post<void>(`${this.apiURL}/logout`, {}, { withCredentials: true })
+      .post<void>(`${this.apiURL}/auth/logout`, {}, { withCredentials: true })
       .pipe(
         tap(() => {
           this.currentUserSubject.next(null); // Clear current user state on logout
@@ -84,18 +82,27 @@ export class AuthService {
    * @returns Observable<any>
    */
   checkAuthStatus(): Observable<any> {
-    return this.http.get<{user: User}>(`${this.apiURL}/auth-check`, { withCredentials: true }).pipe(
-      tap((response) => {
-        console.log('Auth check user:', response.user);
-        this.currentUserSubject.next(response.user); 
-      }),
-      catchError((error) => {
-        console.error('Auth check error:', error);
-        this.currentUserSubject.next(null);
-        return of(null);
-      })
-    );
+    return this.http
+      .get<{ user: User }>(`${this.apiURL}/users/auth-check`, { withCredentials: true })
+      .pipe(
+        tap((response) => {
+          if (response?.user) {
+            this.currentUserSubject.next(response.user);
+          } else {
+            this.currentUserSubject.next(null);
+          }
+        }),
+        catchError((error) => {
+          this.currentUserSubject.next(null);
+          console.error('Auth check failed:', error);
+          return of(null); // Prevent breaking the app on failed checks
+        })
+      );
   }
+  
+  
+  
+  
   /**
    * Get the current user's username.
    * @returns string
@@ -108,16 +115,21 @@ export class AuthService {
    * Fetch current user details from the backend and update the user state.
    * @returns Observable<User>
    */
-  fetchCurrentUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiURL}/auth-check`, { withCredentials: true }).pipe(
+  fetchCurrentUser(): Observable<User | null> {
+    return this.http.get<User>(`${this.apiURL}/users/auth-check`, { withCredentials: true }).pipe(
       tap((user) => {
-        this.currentUserSubject.next(user); // Update user state after fetching details
+        if (user) {
+          this.currentUserSubject.next(user); // Update user state if valid
+        } else {
+          this.currentUserSubject.next(null); // Clear user state if no user found
+        }
       }),
       catchError((error) => {
         console.error('Failed to fetch current user:', error);
-        this.currentUserSubject.next(null);
-        throw error;
+        this.currentUserSubject.next(null); // Ensure state is cleared on error
+        return of(null); // Return a safe default value to avoid breaking
       })
     );
   }
+  
 }
