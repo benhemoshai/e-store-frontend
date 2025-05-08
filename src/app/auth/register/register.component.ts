@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { RegisterInput } from '../../models/register-input';
+import { verify } from 'crypto';
 
 @Component({
   selector: 'app-register',
@@ -23,6 +24,7 @@ export class RegisterComponent implements OnInit {
       userName: ['', Validators.required], // Backend expects `userName`
       email: ['', [Validators.required, Validators.email]], // Valid email
       password: ['', [Validators.required, Validators.minLength(6)]], // Min 6 chars
+      verifyPassword: ['', [Validators.required, Validators.minLength(6)]], // Min 6 chars
     });
   }
 

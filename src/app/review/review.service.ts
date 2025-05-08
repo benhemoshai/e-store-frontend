@@ -18,6 +18,11 @@ export class ReviewService {
 
   // Method to add a review for a specific product
   addReview(productId: string, review: { rating: number; comment: string }): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/products/${productId}/reviews`, review);
+    return this.http.post<any>(
+      `${this.baseUrl}/products/${productId}/reviews`,
+      review,
+      { withCredentials: true } // 🟢 This tells Angular to send session cookies
+    );
   }
+  
 }

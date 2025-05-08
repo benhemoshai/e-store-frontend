@@ -47,6 +47,24 @@
         </span>
       </div>
 
+      <div class="form-group">
+        <label for="verified-password">Verify Password</label>
+        <input
+          id="verified-password"
+          formControlName="verifyPassword"
+          type="password"
+        />
+        <span
+          class="error-message"
+          *ngIf="
+            registerForm.get('password')?.value !==
+            registerForm.get('verifyPassword')?.value
+          "
+        >
+          Password is required and must be at least 6 characters.
+        </span>
+      </div>
+
       <button type="submit" [disabled]="registerForm.invalid">Register</button>
     </form>
   </div>

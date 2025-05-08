@@ -5,5 +5,6 @@ export interface User {
     email: any,
     password: any,
     role: string;
-    active: boolean
+    active: boolean,
+    purchasedProducts:any,
   }

@@ -55,10 +55,7 @@ export class ReviewComponent implements OnInit {
   }
 
   addReview(): void {
-    if (!this.isLoggedIn) {
-      alert('Please log in to add a review.');
-      return;
-    }
+  
 
     if (!this.productId || this.newReview.rating <= 0 || !this.newReview.comment.trim()) {
       alert('Please provide a valid rating and comment.');
@@ -77,7 +74,28 @@ export class ReviewComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error adding review:', error);
-      },
+      
+        if (error.status === 403) {
+          this.snackBar.open('You can only review products you have purchased.', '', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+        } else if (error.status === 401) {
+          this.snackBar.open('Please log in to add a review.', '', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+        } else {
+          this.snackBar.open('An error occurred while submitting your review.', '', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+        }
+      }
+      
     });
   }
 
